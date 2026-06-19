@@ -16,17 +16,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pv_movil.adapters.ClienteAdapter
 import com.google.gson.Gson
-import core.dtos.cliente.ClienteCreateRequestDTO
-import core.dtos.cliente.ClienteRequestDTO
-import core.dtos.cliente.ClientesResponseDTO
-import core.dtos.cliente.ClienteResponseDTO
 import core.services.RetrofitClient
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Locale
+// dtos
+import core.dtos.cliente.ClienteRequestDTO
+import core.dtos.cliente.ClientesResponseDTO
+import core.dtos.cliente.ClienteResponseDTO
+import core.dtos.cliente.ClienteCreateRequestDTO
 
 class AdministrarClientes : Fragment() {
 
+    // variables
     private lateinit var etClave: EditText
     private lateinit var etNombre: EditText
     private lateinit var etApellido: EditText
@@ -45,6 +47,7 @@ class AdministrarClientes : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_administrar_clientes, container, false)
 
+        // inicializar variables
         etClave = view.findViewById(R.id.etClave)
         etNombre = view.findViewById(R.id.etNombre)
         etApellido = view.findViewById(R.id.etApellido)
@@ -56,11 +59,13 @@ class AdministrarClientes : Fragment() {
         btnEliminar = view.findViewById(R.id.btnEliminar)
         rvClientes = view.findViewById(R.id.rvClientes)
 
+        // configurar componentes
         setupDatePicker()
         setupRecyclerView()
         setupButtons()
         loadClientes()
 
+        // retornar la vista
         return view
     }
 
@@ -88,16 +93,19 @@ class AdministrarClientes : Fragment() {
                 val formattedDate = String.format(Locale.US, "%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay)
                 etFechaNacimiento.setText(formattedDate)
 
-                // Calcular edad automáticamente
+                // calcular edad automáticamente
                 val birthDate = Calendar.getInstance()
                 birthDate.set(selectedYear, selectedMonth, selectedDay)
-                
+
+                // obtener la fecha actual
                 var calculatedAge = calendar.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR)
-                
+
+                // si aún no se ha cumplido el cumpleaños este año, restar 1 a la edad
                 if (calendar.get(Calendar.DAY_OF_YEAR) < birthDate.get(Calendar.DAY_OF_YEAR)) {
                     calculatedAge--
                 }
-                
+
+                // actualizar el campo de edad
                 etEdad.setText(calculatedAge.coerceAtLeast(0).toString())
             },
             year, month, day
@@ -106,6 +114,7 @@ class AdministrarClientes : Fragment() {
         // limitar la fecha máxima a hoy para evitar errores
         datePickerDialog.datePicker.maxDate = calendar.timeInMillis
 
+        // mostrar el datepicker
         datePickerDialog.show()
     }
 
@@ -117,13 +126,15 @@ class AdministrarClientes : Fragment() {
             etClave.setText(cliente.clave.toString())
             etNombre.setText(cliente.nombreCompleto)
             etApellido.setText("") 
-            layoutApellido.visibility = View.GONE // Escondemos el campo Apellido
+            layoutApellido.visibility = View.GONE // escondemos el campo Apellido
             etEdad.setText(cliente.edad.toString())
             etFechaNacimiento.setText(cliente.fechaNacimiento)
         }
+        // establecer el adapter
         rvClientes.adapter = adapter
     }
 
+    // configura los botones
     private fun setupButtons() {
         btnNuevo.setOnClickListener {
             clearFields()
@@ -134,26 +145,31 @@ class AdministrarClientes : Fragment() {
         }
 
         btnEliminar.setOnClickListener {
+            // validar que se haya seleccionado un cliente
             val claveStr = etClave.text.toString()
             if (claveStr.isEmpty()) {
                 Toast.makeText(requireContext(), "Seleccione un cliente para eliminar", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            
+
+            // eliminar el cliente
             val clave = claveStr.toInt()
             val nombre = etNombre.text.toString()
-            
+
+            // mostrar un diálogo de confirmación
             showDeleteConfirmation(clave, nombre)
         }
     }
 
     private fun showDeleteConfirmation(clave: Int, nombre: String) {
+        // mostrar un diálogo de confirmación
         AlertDialog.Builder(requireContext())
             .setTitle("Confirmar eliminación")
             .setMessage("¿Estás seguro de que deseas eliminar al cliente $nombre?")
             .setPositiveButton("Eliminar") { _, _ ->
                 deleteCliente(clave)
             }
+            // si se cancela, no hacer nada
             .setNegativeButton("Cancelar", null)
             .show()
     }
@@ -161,13 +177,16 @@ class AdministrarClientes : Fragment() {
     private fun deleteCliente(clave: Int) {
         lifecycleScope.launch {
             try {
+                // llamar al servicio de eliminación
                 val request = ClienteRequestDTO(clave)
                 val response = RetrofitClient.getClienteService(requireContext()).deleteCliente(request)
 
                 if (response.isSuccessful && response.body()?.exito == true) {
+                    // si se elimina correctamente, limpiar los campos
                     Toast.makeText(requireContext(), "Cliente eliminado correctamente", Toast.LENGTH_SHORT).show()
                     clearFields()
                     loadClientes()
+                // si no se elimina correctamente, mostrar un mensaje de error
                 } else {
                     val errorMsg = try {
                         val errorJson = response.errorBody()?.string()
@@ -183,22 +202,24 @@ class AdministrarClientes : Fragment() {
         }
     }
 
+    // limpia los campos
     private fun clearFields() {
         etClave.setText("")
         etNombre.setText("")
         etApellido.setText("")
-        layoutApellido.visibility = View.VISIBLE // Volvemos a mostrar el campo Apellido
+        layoutApellido.visibility = View.VISIBLE // volvemos a mostrar el campo Apellido
         etEdad.setText("")
         etFechaNacimiento.setText("")
     }
 
+    // guarda un cliente
     private fun saveCliente() {
         val nombre = etNombre.text.toString().trim()
         val apellido = etApellido.text.toString().trim()
         val edadStr = etEdad.text.toString().trim()
         val fecha = etFechaNacimiento.text.toString().trim()
 
-        // Validaciones basadas en el DTO de C#
+        // validaciones
         if (nombre.length < 2 || nombre.length > 60) {
             etNombre.error = "Nombre debe tener entre 2 y 60 caracteres"
             return
@@ -217,15 +238,19 @@ class AdministrarClientes : Fragment() {
             return
         }
 
+        // guardar el cliente
         lifecycleScope.launch {
             try {
+                // llamar al servicio de guardado
                 val request = ClienteCreateRequestDTO(nombre, apellido, edad, fecha)
                 val response = RetrofitClient.getClienteService(requireContext()).postCliente(request)
 
                 if (response.isSuccessful && response.body()?.exito == true) {
+                    // si se guarda correctamente, limpiar los campos
                     Toast.makeText(requireContext(), "Cliente guardado correctamente", Toast.LENGTH_SHORT).show()
                     clearFields()
                     loadClientes()
+                // si no se guarda correctamente, mostrar un mensaje de error
                 } else {
                     val errorMsg = try {
                         val errorJson = response.errorBody()?.string()
@@ -241,9 +266,11 @@ class AdministrarClientes : Fragment() {
         }
     }
 
+    // carga la lista de clientes
     private fun loadClientes() {
         lifecycleScope.launch {
             try {
+                // llamar al servicio de clientes
                 val response = RetrofitClient.getClienteService(requireContext()).getClientes()
                 if (response.isSuccessful) {
                     val body = response.body()
@@ -252,6 +279,7 @@ class AdministrarClientes : Fragment() {
                     } else {
                         Toast.makeText(requireContext(), body?.mensaje ?: "Error al obtener clientes", Toast.LENGTH_SHORT).show()
                     }
+                // si no se obtienen correctamente, mostrar un mensaje de error
                 } else {
                     val errorMsg = try {
                         val errorJson = response.errorBody()?.string()
