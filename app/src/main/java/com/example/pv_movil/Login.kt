@@ -10,12 +10,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
-import core.dtos.auth.LoginRequestDTO
-import core.dtos.auth.LoginResponseDTO
 import core.services.RetrofitClient
 import core.utils.SessionManager
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
+// dtos
+import core.dtos.auth.LoginRequestDTO
+import core.dtos.auth.LoginResponseDTO
 
 class Login : AppCompatActivity() {
 
@@ -66,8 +67,7 @@ class Login : AppCompatActivity() {
             try {
                 // llamada a la api para iniciar sesión
                 val response = RetrofitClient.getAuthService(this@Login).login(
-                    LoginRequestDTO(usuario, contrasena)
-                )
+                    LoginRequestDTO(usuario, contrasena))
 
                 // procesamiento de la respuesta de la api
                 if (response.isSuccessful) {
@@ -103,8 +103,8 @@ class Login : AppCompatActivity() {
                     }
                     btnLogin.isEnabled = true
                 }
-
             } catch (e: Exception) {
+                // mensaje de error en caso de fallo en la conexión
                 tvError.text = "Sin conexión: Revisa tu internet"
                 btnLogin.isEnabled = true
             }
