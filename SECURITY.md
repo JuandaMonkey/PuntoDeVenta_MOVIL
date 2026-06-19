@@ -4,7 +4,7 @@ Guía de seguridad de la aplicación móvil, implementada siguiendo los estánda
 
 ---
 
-## 🔐 Almacenamiento Seguro de Datos (M1: Insecure Data Storage)
+## Almacenamiento Seguro de Datos (M1: Insecure Data Storage)
 
 ### EncryptedSharedPreferences
 - Los tokens de autenticación y datos sensibles **NO** se almacenan en texto plano.
@@ -13,7 +13,7 @@ Guía de seguridad de la aplicación móvil, implementada siguiendo los estánda
 
 ---
 
-## 📡 Comunicación Segura (M3: Insecure Communication)
+## Comunicación Segura (M3: Insecure Communication)
 
 ### Interceptor de Autenticación
 - Implementación de `AuthInterceptor` para la inyección automática y centralizada del header `Authorization: Bearer`.
@@ -25,7 +25,7 @@ Guía de seguridad de la aplicación móvil, implementada siguiendo los estánda
 
 ---
 
-## 🔑 Autenticación y Autorización (M4: Insufficient Authentication/Authorization)
+## Autenticación y Autorización (M4: Insufficient Authentication/Authorization)
 
 ### Manejo de Sesión y Roles
 - **Cierre de Sesión Seguro:** Al cerrar sesión, se eliminan físicamente las llaves y tokens del almacenamiento cifrado y se limpia el historial de actividades.
@@ -37,7 +37,7 @@ Guía de seguridad de la aplicación móvil, implementada siguiendo los estánda
 
 ---
 
-## 🛠 Integridad de Datos y Gestión de Secretos
+## Integridad de Datos y Gestión de Secretos
 
 ### Validaciones de Entrada
 - Sanitización y validación de longitud/formato en el cliente antes del envío de datos.
