@@ -9,6 +9,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+// utils
 import core.utils.SessionManager
 
 class MainActivity : AppCompatActivity() {
@@ -24,6 +25,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        // configurar BottomNavigationView
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
         // cargar fragmento inicial
@@ -35,13 +37,14 @@ class MainActivity : AppCompatActivity() {
         bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_clientes -> {
-                    // Solo reemplazar si no es el fragmento actual
+                    // solo reemplazar si no es el fragmento actual
                     val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
                     if (currentFragment !is AdministrarClientes) {
                         replaceFragment(AdministrarClientes())
                     }
                     true
                 }
+                // agrega más casos para otros fragmentos según sea necesario
                 R.id.nav_logout -> {
                     showLogoutConfirmation()
                     false
@@ -50,10 +53,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Manejar clics cuando el ítem ya está seleccionado (opcional, previene recargas innecesarias)
+        // manejar clics cuando el ítem ya está seleccionado (previene recargas innecesarias)
         bottomNavigation.setOnItemReselectedListener { item ->
             if (item.itemId == R.id.nav_clientes) {
-                // Aquí podrías hacer scroll al inicio si tuvieras una lista larga,
+                // aquí se podria implementar scroll al inicio si tuvieras una lista larga,
                 // pero por ahora simplemente ignoramos para evitar que se cierre la app.
             }
         }
@@ -72,6 +75,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             }
+            // si el usuario hace clic en "No", no hará nada
             .setNegativeButton("No", null)
             .show()
     }
