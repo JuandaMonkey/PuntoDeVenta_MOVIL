@@ -7,8 +7,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.Fragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
+import com.example.pv_movil.adapters.viewPagerAdapter
 // utils
 import core.utils.SessionManager
 
@@ -21,69 +23,63 @@ class MainActivity : AppCompatActivity() {
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        // configurar BottomNavigationView
-        val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        val tabLayout: TabLayout = findViewById(R.id.TabLayout)
+        val viewPager: ViewPager2 = findViewById(R.id.viewPager)
 
-        // cargar fragmento inicial
-        if (savedInstanceState == null) {
-            replaceFragment(AdministrarClientes())
-        }
+        // configurar el adaptador
+        val adapter = viewPagerAdapter(this)
+        viewPager.adapter = adapter
 
-        // configurar el listener para los cambios de selección en el BottomNavigationView
-        bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_clientes -> {
-                    // solo reemplazar si no es el fragmento actual
-                    val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
-                    if (currentFragment !is AdministrarClientes) {
-                        replaceFragment(AdministrarClientes())
-                    }
-                    true
+        // vincular el TabLayout de abajo con el ViewPager2 mediante el Mediator
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            when (position) {
+                0 -> {
+                    tab.text = "Clientes" // nombre
+                    tab.setIcon(R.drawable.ic_people) // icon
                 }
-                // agrega más casos para otros fragmentos según sea necesario
-                R.id.nav_logout -> {
+                1 -> {
+                    tab.text = "Salir"
+                    tab.setIcon(R.drawable.ic_logout)
+                }
+            }
+        }.attach()
+
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                if (tab?.position == 1) {
                     showLogoutConfirmation()
-                    false
-                }
-                else -> false
-            }
-        }
 
-        // manejar clics cuando el ítem ya está seleccionado (previene recargas innecesarias)
-        bottomNavigation.setOnItemReselectedListener { item ->
-            if (item.itemId == R.id.nav_clientes) {
-                // aquí se podria implementar scroll al inicio si tuvieras una lista larga,
-                // pero por ahora simplemente ignoramos para evitar que se cierre la app.
+                    tabLayout.post {
+                        tabLayout.getTabAt(0)?.select()
+                        viewPager.currentItem = 0
+                    }
+                }
             }
-        }
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                if (tab?.position == 1) {
+                    showLogoutConfirmation()
+                }
+            }
+        })
     }
 
-    // muestra un diálogo de confirmación para cerrar sesión
     private fun showLogoutConfirmation() {
         AlertDialog.Builder(this)
             .setTitle("Cerrar Sesión")
             .setMessage("¿Estás seguro de que deseas salir?")
             .setPositiveButton("Sí") { _, _ ->
-                // limpiar sesión y volver al login
                 SessionManager(this).clearSession()
                 val intent = Intent(this, Login::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
                 finish()
             }
-            // si el usuario hace clic en "No", no hará nada
             .setNegativeButton("No", null)
             .show()
-    }
-
-    // reemplaza el fragmento actual con el nuevo fragmento
-    private fun replaceFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .commit()
     }
 }
