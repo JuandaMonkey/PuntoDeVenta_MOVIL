@@ -11,6 +11,6 @@ interface AuthService {
     /**
      * login
     **/
-    @POST("Auth/login")
+    @POST("api/Auth/login")
     suspend fun login(@Body request: LoginRequestDTO): Response<LoginResponseDTO>
 }

@@ -9,11 +9,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    private const val BASE_URL = "https://puntodeventa-api.onrender.com/api/"
+    private const val BASE_URL = "https://puntodeventa-api.onrender.com/"
     private var retrofit: Retrofit? = null
 
     /**
-     * Obtiene la instancia de Retrofit. Se requiere un [Context] para inicializar
+     * obtiene la instancia de Retrofit. Se requiere un [Context] para inicializar
      * el [SessionManager] y el interceptor de autenticación.
      */
     private fun getInstance(context: Context): Retrofit {
