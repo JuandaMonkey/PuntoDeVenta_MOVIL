@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,7 +9,6 @@
     android:orientation="vertical"
     android:padding="12dp"
     tools:context=".AdministrarClientes">
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,7 +17,8 @@
         android:text="CATÁLOGO DE CLIENTES"
         android:textColor="@color/primary"
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textStyle="bold">
+    </TextView>
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
@@ -25,18 +26,15 @@
         app:cardCornerRadius="12dp"
         app:cardElevation="1dp"
         app:strokeWidth="0dp">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="12dp">
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -52,7 +50,8 @@
                         android:enabled="false"
                         android:padding="10dp"
                         android:textSize="14sp"
-                        android:inputType="number" />
+                        android:inputType="number">
+                    </com.google.android.material.textfield.TextInputEditText>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -61,14 +60,14 @@
                     android:layout_weight="2.5"
                     android:hint="Nombre"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
-
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etNombre"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
                         android:textSize="14sp"
-                        android:inputType="textPersonName" />
+                        android:inputType="textPersonName">
+                    </com.google.android.material.textfield.TextInputEditText>
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
@@ -79,14 +78,14 @@
                 android:layout_marginTop="6dp"
                 android:hint="Apellido"
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
-
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etApellido"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
                     android:textSize="14sp"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName">
+                </com.google.android.material.textfield.TextInputEditText>
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
@@ -94,7 +93,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:orientation="horizontal">
-
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -102,7 +100,6 @@
                     android:layout_marginEnd="8dp"
                     android:hint="Edad"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
-
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etEdad"
                         android:layout_width="match_parent"
@@ -110,7 +107,8 @@
                         android:enabled="false"
                         android:padding="10dp"
                         android:textSize="14sp"
-                        android:inputType="number" />
+                        android:inputType="number">
+                    </com.google.android.material.textfield.TextInputEditText>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -119,7 +117,6 @@
                     android:layout_weight="2"
                     android:hint="Fecha nacimiento"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
-
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etFechaNacimiento"
                         android:layout_width="match_parent"
@@ -128,7 +125,8 @@
                         android:clickable="true"
                         android:padding="10dp"
                         android:textSize="14sp"
-                        android:inputType="date" />
+                        android:inputType="date">
+                    </com.google.android.material.textfield.TextInputEditText>
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
@@ -138,7 +136,6 @@
                 android:layout_marginTop="12dp"
                 android:gravity="center"
                 android:orientation="horizontal">
-
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnNuevo"
                     style="@style/Widget.Material3.Button.TonalButton"
@@ -150,7 +147,8 @@
                     android:text="Nuevo"
                     android:textSize="13sp"
                     app:icon="@drawable/ic_add"
-                    app:iconSize="16dp" />
+                    app:iconSize="16dp">
+                </com.google.android.material.button.MaterialButton>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnGuardar"
@@ -161,8 +159,8 @@
                     android:text="Guardar"
                     android:textSize="13sp"
                     app:icon="@drawable/ic_save"
-                    app:iconSize="16dp" />
-
+                    app:iconSize="16dp">
+                </com.google.android.material.button.MaterialButton>
             </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
@@ -177,8 +175,8 @@
                 app:cornerRadius="10dp"
                 app:icon="@drawable/ic_delete"
                 app:iconSize="16dp"
-                app:iconTint="@color/white" />
-
+                app:iconTint="@color/white">
+            </com.google.android.material.button.MaterialButton>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -189,14 +187,14 @@
         android:background="@drawable/bg_table_header"
         android:orientation="horizontal"
         android:padding="10dp">
-
         <TextView
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:text="CLAVE"
             android:textColor="@color/white"
             android:textSize="12sp"
-            android:textStyle="bold" />
+            android:textStyle="bold">
+        </TextView>
 
         <TextView
             android:layout_width="match_parent"
@@ -204,13 +202,14 @@
             android:text="NOMBRE DEL CLIENTE"
             android:textColor="@color/white"
             android:textSize="12sp"
-            android:textStyle="bold" />
+            android:textStyle="bold">
+        </TextView>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvClientes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="0dp" />
-
+        android:layout_marginTop="0dp">
+    </androidx.recyclerview.widget.RecyclerView>
 </LinearLayout>

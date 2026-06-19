@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -15,7 +16,6 @@
         android:padding="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
         <TextView
             android:id="@+id/tvTitulo"
             android:layout_width="wrap_content"
@@ -24,7 +24,8 @@
             android:text="Punto de Venta"
             android:textColor="@color/primary"
             android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textStyle="bold">
+        </TextView>
 
         <TextView
             android:layout_width="wrap_content"
@@ -33,7 +34,8 @@
             android:layout_marginTop="4dp"
             android:text="Inicia sesión para continuar"
             android:textColor="@color/text_secondary"
-            android:textSize="14sp" />
+            android:textSize="14sp">
+        </TextView>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -50,7 +52,8 @@
                 android:layout_height="wrap_content"
                 android:padding="12dp"
                 android:textSize="15sp"
-                android:inputType="text" />
+                android:inputType="text">
+            </com.google.android.material.textfield.TextInputEditText>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -63,14 +66,14 @@
             app:startIconDrawable="@drawable/ic_lock"
             app:startIconTint="@color/text_secondary"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
-
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etContrasena"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
                 android:textSize="15sp"
-                android:inputType="textPassword" />
+                android:inputType="textPassword">
+            </com.google.android.material.textfield.TextInputEditText>
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -81,7 +84,8 @@
             android:text=""
             android:textColor="@color/error"
             android:textSize="13sp"
-            android:textAlignment="center" />
+            android:textAlignment="center">
+        </TextView>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLogin"
@@ -90,8 +94,7 @@
             android:layout_marginTop="20dp"
             android:text="Entrar"
             android:textSize="15sp"
-            app:cornerRadius="10dp" />
-
+            app:cornerRadius="10dp">
+        </com.google.android.material.button.MaterialButton>
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
