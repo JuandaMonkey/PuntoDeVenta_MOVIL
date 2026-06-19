@@ -10,7 +10,7 @@ import core.dtos.auth.LoginResponseDTO
 interface AuthService {
     /**
      * login
-    **/
+     */
     @POST("api/Auth/login")
     suspend fun login(@Body request: LoginRequestDTO): Response<LoginResponseDTO>
 }
