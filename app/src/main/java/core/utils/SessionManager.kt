@@ -41,8 +41,10 @@ class SessionManager(context: Context) {
     fun getUserRole(): String? {
         val token = getToken() ?: return null
         return try {
+            // divide el token en partes
             val parts = token.split(".")
             if (parts.size < 2) return null
+            // decodifica la parte del payload
             val payload = String(Base64.decode(parts[1], Base64.URL_SAFE))
             val json = JSONObject(payload)
 
@@ -50,6 +52,7 @@ class SessionManager(context: Context) {
             val rol = json.optString("rol", "")
             if (rol.isNotEmpty()) return rol
 
+            // si no se encuentra "rol", intenta obtener "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
             val dotNetRole = json.optString("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "")
             if (dotNetRole.isNotEmpty()) dotNetRole else null
         } catch (e: Exception) {
