@@ -4,46 +4,45 @@ Guía de seguridad de la aplicación móvil, implementada siguiendo los estánda
 
 ---
 
-## Almacenamiento Seguro de Datos (M1: Insecure Data Storage)
+## 🔐 Almacenamiento Seguro de Datos (M1: Insecure Data Storage)
 
 ### EncryptedSharedPreferences
-- Los tokens de autenticación y datos sensibles **NO** se almacenan en texto plano en `SharedPreferences` estándar.
+- Los tokens de autenticación y datos sensibles **NO** se almacenan en texto plano.
 - Se utiliza la librería **Jetpack Security (`androidx.security:security-crypto`)**.
-- Los datos se cifran en reposo utilizando:
-  - **KeyScheme:** AES256_GCM para la llave maestra.
-  - **EncryptionScheme:** AES256_SIV para las llaves y AES256_GCM para los valores.
-- Las llaves maestras están respaldadas por el **Android Keystore System**, preferiblemente en hardware (TEE/StrongBox) si el dispositivo lo soporta.
+- Los datos se cifran en reposo utilizando **AES-256** con llaves respaldadas por el **Android Keystore System** (hardware-backed TEE/StrongBox).
 
 ---
 
-## Comunicación Segura (M3: Insecure Communication)
+## 📡 Comunicación Segura (M3: Insecure Communication)
 
 ### Interceptor de Autenticación
-- Se implementó un `AuthInterceptor` que inyecta automáticamente el token JWT en el encabezado `Authorization: Bearer <token>` de forma centralizada.
-- Esto evita el manejo manual de credenciales en cada llamada al servicio y reduce el riesgo de fugas de tokens en logs o código.
+- Implementación de `AuthInterceptor` para la inyección automática y centralizada del header `Authorization: Bearer`.
+- Reduce la superficie de exposición del token en el código fuente.
 
 ### HTTPS y TLS
-- La aplicación se comunica exclusivamente mediante **HTTPS** con el backend (`https://puntodeventa-api.onrender.com/`).
-- Se utiliza `HttpLoggingInterceptor` (nivel `BODY`) configurado únicamente para depuración, debiendo desactivarse o restringirse en compilaciones de producción.
+- Comunicación cifrada exclusiva mediante **HTTPS**.
+- El logging de red (`HttpLoggingInterceptor`) está restringido a niveles de depuración.
 
 ---
 
-## Autenticación y Autorización (M4: Insufficient Authentication/Authorization)
+## 🔑 Autenticación y Autorización (M4: Insufficient Authentication/Authorization)
 
-### Manejo de JWT (JSON Web Tokens)
-- El token tiene un tiempo de expiración definido por el servidor.
-- La aplicación realiza una decodificación local del JWT en el cliente (`SessionManager.getUserRole()`) para gestionar la interfaz de usuario (UI) basada en roles (ej. `admin`), sin embargo, la validación final siempre la realiza el servidor mediante el middleware de autorización.
+### Manejo de Sesión y Roles
+- **Cierre de Sesión Seguro:** Al cerrar sesión, se eliminan físicamente las llaves y tokens del almacenamiento cifrado y se limpia el historial de actividades.
+- **Validación de Roles:** Decodificación local de JWT para restringir visualmente funciones administrativas (ej. `admin`), delegando la validación final al servidor.
 
-### Prevención de Enumeración
-- Siguiendo las mejores prácticas, la aplicación muestra mensajes de error genéricos ("Usuario o contraseña incorrectos") en lugar de especificar si el usuario existe o no, dificultando ataques de fuerza bruta.
+### Prevención de Enumeración y Ataques
+- Mensajes de error genéricos en el Login para mitigar ataques de diccionario y enumeración de usuarios.
+- Diálogos de confirmación obligatorios para acciones destructivas (Eliminación de registros).
 
 ---
 
-## Gestión de Secretos y Configuración
+## 🛠 Integridad de Datos y Gestión de Secretos
 
-### Git Hygiene
-- El archivo `.gitignore` está configurado para excluir archivos sensibles como `local.properties`.
-- Los secretos de sesión se generan dinámicamente y se guardan en el almacenamiento cifrado del dispositivo, nunca en el código fuente (Hardcoded).
+### Validaciones de Entrada
+- Sanitización y validación de longitud/formato en el cliente antes del envío de datos.
+- Automatización del cálculo de edad mediante `DatePicker` para prevenir discrepancias de datos e integridad en el backend.
 
-### Componentes Actualizados
-- Se mantienen las dependencias (Retrofit, OkHttp, Security Crypto) actualizadas a sus versiones estables para mitigar vulnerabilidades conocidas en librerías de terceros.
+### Componentes y Dependencias
+- Uso de componentes de arquitectura de Android (Lifecycle, Coroutines) para un manejo de memoria seguro.
+- Mantener las librerías de terceros actualizadas a versiones estables para evitar vulnerabilidades conocidas.
